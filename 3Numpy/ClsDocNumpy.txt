@@ -1,0 +1,144 @@
+! pip install numpy
+=======================================================================
+import numpy as np
+np.__version__
+=======================================================================
+#1D
+--------------
+#range(4)
+#np.arange(1,12)
+npArray = np.arange(1,28 , dtype=np.float64) #arrange func gave 1D array, 1 to 10 data and datatype will be float
+npArray.ndim #show dimention ,1dim array
+npArray.dtype #given datatype output float
+npArray.shape #show number of rows,11 rows
+
+npArray.reshape(2,5).ndim #given 2 by 5 matrix ,ndim: 2 dimention
+npArray.reshape(2,5).shape#shape of data 2 rows 5 colums
+npArray.reshape(3 , 3 , 3).ndim
+npArray.size #number of element
+npArray.itemsize*npArray.size #8 byte for float64, 4 byte for integer
+npArray
+======================================================================
+npArray[2:6:2]#slicing
+npArray[2]=100 #value update
+npArray
+================================================================
+#2D
+ar2D = np.array( [ [ 1 , 2 , 3 ] , [ 4 , 5 , 6 ] , [ 7 , 7, 7 ] ] )
+a2=ar2D[1][0]#indexing output 4   
+a2=ar2D[1,1]#indexing 2nd way
+a2
+==================================================================
+num=1,2,3,4,5,6
+num[:4]
+num[2::]
+
+ar2D[1:2:2,1:2:2]#rows lower boundary,higher boundary,steps.after comma colum low,high,steps 
+ar2D[2:,2]#output 13
+ar2D[0:1,0]#output 1,4
+==================================================================
+#3D
+
+ar3D=npArray.reshape(3 , 3 , 3)
+a3=ar3D[0,0,0]#output 1st matrix 1st row 1st col value
+ar3D
+output:
+array([[[  1.,   2., 100.],
+        [  4.,   5.,   6.],
+        [  7.,   8.,   9.]],
+
+       [[ 10.,  11.,  12.],
+        [ 13.,  14.,  15.],
+        [ 16.,  17.,  18.]],
+
+       [[ 19.,  20.,  21.],
+        [ 22.,  23.,  24.],
+        [ 25.,  26.,  27.]]])
+==================================================================
+ar3D[:,:,0:]
+ar3D[:,0,0] #output array([ 1., 10., 19.])
+ar3D[:,0,:] #output all matrix 1st row
+=================================================================
+==================================================================
+#sometimes we need to create dummy array so we need numpy
+#functions for array 
+np.empty((3,3))#randomly generate 3 by 3 matrix
+===================================================================
+np.ones((3,3))#randomly generate 1 values 3 by 3 matrix 
+np.zeros((3,3))
+#identity metrix ,diagonally create data
+np.eye(3,3)# provide as a argument thats why not needed brackets
+================================================================
+npArray.mean()
+npArray.std()
+npArray.var()
+npArray.sum()
+npArray.sort()
+npArray
+npArray.min()#Return min value
+npArray.max()
+#npArray.mode()
+==================================================================
+np.cov((npArray))
+np.median(npArray)
+#np.mode((npArray))# prb how to find mode
+npArray
+np.cov((npArray))# prb not same result 
+================================================================
+ar2D.mean(axis=1)#Row wise
+ar2D.mean(axis=0)#column wise
+ar2D.mean()#all values
+================================================================
+#filtering
+#ar3D
+npArray
+npArray[(npArray>6) & (npArray<20)]
+=================================================================
+npArray[(npArray%2==0)]#Even Value
+npArray[~(npArray%2==0)]#Odd values
+=================================================================
+npArray // 2#Integer devision
+npArray + 2
+npArray - 2
+npArray * 2
+npArray / 2
+npArray ** 2 #power calculate
+==============================================
+npArray * npArray 
+npArray + npArray #vector multiplication
+===============================================================
+#Matrix Multiplication
+ar2D
+ar2D @ ar2D , ar2D * ar2D #Matrix Multiplication
+=================================================================
+#Sin cos calculation
+np.sin(npArray)
+==========================================================
+#prb
+
+np.dot(ar2D,ar2D)#why use dot product
+=============================================================
+#Transpose
+np.transpose(ar2D)#Row will be col col will be row
+ar2D.T #another way to get transpose
+np.transpose(ar3D)#prb 3d
+=================================================================
+#prb
+
+from numpy import linalg as l
+l.det(ar2D)#find matrix determinate
+# l.inv(ar2D)#inverse of matrix  prb show error
+l.norm(ar2D)  #prb why use norm 
+=================================================================
+#generate 1D 
+np.linspace(1,10,30 ,retstep=True ,endpoint=False) #will get 30 values within 1 to 10 #lower range ,upper range, 30 values #not include endpoint value
+
+=============================================================
+np.cross(ar2D,ar2D)#if we cross same value then it will provide 0
+np.c_[npArray,npArray+2]  #just merge vertically
+ar2D.ravel()#convert 2d to 1d array
+ar2D.argmax()#return maximum value in which index
+ar2D.argmin()#return min index number
+ar2D.argsort()#it will sort index wise
+==========================================================
+np.meshgrid(np.arange(1,10,2),np.arange(10,20,2)) #generate 2d array
