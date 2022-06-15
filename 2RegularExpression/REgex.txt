@@ -1,0 +1,5 @@
+#Notes for validation
+#Regex documentation
+# https://support.google.com/analytics/answer/1034324?hl=en
+# https://support.google.com/a/answer/1371415?hl=en
+# https://developers.google.com/edu/python/regular-expressions
