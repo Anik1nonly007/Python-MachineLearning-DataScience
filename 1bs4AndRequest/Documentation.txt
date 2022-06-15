@@ -1,0 +1,53 @@
+===================================================
+JSON Page Fetch
+===================================================
+first download and install
+! pip install requests
+
+then import:
+import requests
+------------------------------------------------
+then go to google chrome
+search demo api
+then go to this link:
+https://reqres.in/
+then click  here:
+/api/users?page=2
+to see json format data we need to add extention :->
+write: json extension chrome
+go to this link:
+https://chrome.google.com/webstore/detail/jsonview/chklaanhfefbnpoihckbnefhakgolnmc?hl=bn
+and click add to chrome 
+
+then refresh this link : https://reqres.in/api/users
+------------------------------------------------------------------------------------------
+then copy this link: https://reqres.in/api/users
+ and store it in response variable
+then we need to check:
+response.status_code ,response.ok
+by this 2 command
+iff status code = 200, and ok = true,then its ok
+
+===================================================
+HTML Page Fetch
+===================================================
+! pip install requests
+
+then import:
+import requests
+from bs4 import BeautifulSoup
+------------------------------------------------
+then go to google chrome
+search Quotes to Scrape(html page)
+and go to this link:
+https://quotes.toscrape.com/
+------------------------------------------------
+Documentation of Beautiful Soup
+https://www.crummy.com/software/BeautifulSoup/bs4/doc/
+----------------------------------------------------
+parser library: html parser,lxml parser,html5lib
+WE will use lxml format
+then we need to install
+We will install it in terminal by write this command
+pip install lxml
+--------------------------------------------------------
