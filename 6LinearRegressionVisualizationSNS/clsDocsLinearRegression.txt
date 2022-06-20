@@ -1,0 +1,175 @@
+#8 Steps of ML:
+----------------------------------------------------------
+    1.Data Gathering
+    2.Data pre-processing
+    3.Feature Engineering
+    4.Choosing Model
+    5.Training Model
+    6.Test Model/Model Evaluation
+    7.Parameter Tuning#Linear regression has no operation that we can tuning,if we change intercept by ourself then we can tune also ,but its not good
+    8.Prediction
+====================================================================================================
+! pip install seaborn
+-----------------------------------------------------------------------
+import numpy as np
+import matplotlib.pyplot as plt
+import pandas as pd
+import seaborn as sns#Gave proper visualization
+%matplotlib inline
+#produce all the graph here,inside our notebook
+----------------------------------------------------------------------
+# Data Loading
+data = pd.read_csv(r'.\data\FuelConsumption.csv')
+data.head()
+------------------------------------------------------------------------
+data.info()#To see there has any missing values
+----------------------------------------------------------------
+data.describe()#Statical view
+------------------------------------------------------------------
+data.drop(columns=["MODELYEAR","MAKE","MODEL", "TRANSMISSION"], inplace=True)
+----------------------------------------------------------------------
+data[['FUELTYPE']].value_counts()#prolem arrise when we access throug indexing ,thats why we will drop this colm
+----------------------------------------------------------------------
+data[['VEHICLECLASS']].value_counts()#Same as avobe
+--------------------------------------------------------------------
+data.drop(columns=['VEHICLECLASS', 'FUELTYPE'], inplace=True)
+data.head()
+data.describe()
+----------------------------------------------------------------
+data[['ENGINESIZE']].hist()
+data[['CYLINDERS']].hist()
+data[['FUELCONSUMPTION_COMB']].hist()
+----------------------------------------------------------------------
+# Feature Selection
+data.corr()
+---------------------------------------------------------------
+sns.heatmap(data.corr(), annot=True)
+
+====================================================================
+## There are 2 conceptr
+1.Single Linear Regression(Where we use 1 col to make prediction)
+2.Multiple Linear Regression(Where we use 2 or more col to make prediction)
+====================================================================
+-----------------------------------------------------------
+data.drop(columns= ['FUELCONSUMPTION_HWY' , 'FUELCONSUMPTION_COMB' , 'FUELCONSUMPTION_COMB_MPG'] , inplace= True)#(FUELCONSUMPTION_COMB_MPG is neg corr)
+#And (FUELCONSUMPTION_CITY,FUELCONSUMPTION_HWY,FUELCONSUMPTION_COMB)within this 3col FUELCONSUMPTION_CITY is more corr(.9)
+----------------------------------------------------------------
+#prb
+
+sns.heatmap(data.corr(),annot=True)#  prb neg corr FUELCONSUMPTION_CITY & CYLINDERS
+=======================================================================
+# Now we need to install Scikit-learn to make all ML & DS Task
+## after installing we will import this features for complt out task,
+##then we will drop CO2EMISSION and other cols will assign to feature var
+===================================================================
+feature = data.drop(columns=['CO2EMISSIONS'] )
+feature
+-------------------------------------------------------------
+target = data[['CO2EMISSIONS']]
+target
+-----------------------------------------------------------------
+#Spiliting Data
+from sklearn.model_selection import train_test_split #data devided to 2 category,then we train & test between this 2data,for choose best model thats why model_selec
+# train_test_split this func return xtrain xtest,ytrain ytest
+#xtrain,xtest,ytrain,ytest = train_test_split(data , feature,test_size = 0.25 , random_state = 1)#provide All col
+xtrain,xtest,ytrain,ytest = train_test_split(feature , target , test_size = 0.25 , random_state = 1)
+#25 % data use for x&y test,75% data for x&y train.random_state 1 combination of use for x,y train & x,y test data will b fixed,not will be supple
+
+xtrain#800 val 3 cols
+xtest#267 values 3 cols
+--------------------------------------------------------------------
+xtrain.shape,xtest.shape
+ytrain.shape,ytest.shape
+------------------------------------------------------------------
+#prb
+
+#Choosing Model
+#data[['ENGINESIZE', 'CO2EMISSIONS']].plot(kind='scatter')#Another way,may b try next tym
+#data['ENGINESIZE'],data['CO2EMISSIONS'].plot(kind='scatter')  # prb ValErr :plot kind scatter can only be used for data frames
+#plt.plot(feature.ENGINESIZE,target.values)#Line plot
+plt.scatter(feature.ENGINESIZE,target.values)#Values will convert to numpy array
+plt.title('ENGINESIZE Vs CO2EMISSIONS')
+plt.xlabel('ENGINESIZE')
+plt.ylabel('CO2EMISSIONS')
+plt.show()
+-------------------------------------------------------------------
+
+#Modeling
+from sklearn.linear_model import LinearRegression
+model = LinearRegression()
+model.fit(xtrain[['ENGINESIZE']] , ytrain.values.ravel()) 
+#to train model fit func is there,parameter contains xtrain & ytrain,which i want to train
+#Now training has done
+-----------------------------------------------------------------
+#check for 2D 3D 1D
+ytrain#DataFrame
+ytrain.values#Now its 2D numpy Array
+ytrain.values.ravel()#Now it is convert to 1D array
+
+xtrain.ENGINESIZE#Series
+xtrain.ENGINESIZE.values
+--------------------------------------------------------------------
+model.intercept_#That is (THETA 0)
+model.coef_#1 Feature thats why (Theta 1),when more it will b theta1,theta2
+data.iloc[[133,340]]#Actual prediction,ENGINESIZE 3.0,CO2EMISSIONS 274
+------------------------------------------------------------------
+#prb
+
+ypred = model.predict(xtest[['ENGINESIZE']])#prb 267 outputs,how does it predict?based on enginsize predict co2emission???or xtest=267 but xtrain =800.so can we predict?
+#ypred = yhat value based on algorithm
+xtest[['ENGINESIZE']] , ypred#now lets see co2emission depending on engSize,in prev cell we have actual val
+-----------------------------------------------------------------------
+xtest[['ENGINESIZE']].iloc[0],ypred[0],ytest.values[0]
+-------------------------------------------------------------------
+#calculate actual error
+ytest.values[0] - ypred[0]
+------------------------------------------------------------------
+#Evaluation
+#now we do evaluate avg error and how much predict correctly 
+#sklearn gave metrics function that contains many evaluation func,which func throug we evaluate error and check performance
+
+from sklearn.metrics import mean_absolute_error , mean_squared_error , r2_score
+print('AVG Mean Absolute Error: ' , mean_absolute_error(ytest , ypred))#mean_absolute_error take 2 paramtr,1 is y_true means ytest
+print('Mean Squared Error: ' , mean_squared_error(ytest , ypred))
+print('R2Score ,cal  % Error:  ' , r2_score(ytest , ypred))
+----------------------------------------------------------------------
+# Prediction for CYLINDERS
+========================================================================
+plt.scatter(feature.CYLINDERS,target.values)#Values will convert to numpy array
+plt.title('CYLINDERS Vs CO2EMISSIONS')
+plt.xlabel('CYLINDERS')
+plt.ylabel('CO2EMISSIONS')
+plt.show()
+--------------------------------------------------------------------
+data.iloc[[133,340]]
+--------------------------------------------------------------------
+xtest[['CYLINDERS']].iloc[0],ypred[0],ytest.values[0]
+-----------------------------------------------------------------
+modelCY1 = LinearRegression()
+modelCY1.fit(xtrain[['CYLINDERS']] , ytrain.values.ravel())
+print(modelCY1.intercept_)#Theta 0
+print(modelCY1.coef_)#Theta 1
+ypred = modelCY1.predict(xtest[['CYLINDERS']])
+xtest[['CYLINDERS']] , ypred
+------------------------------------------------------------------
+print('AVG Mean Absolute Error: ' , mean_absolute_error(ytest , ypred))#mean_absolute_error take 2 paramtr,1 is y_true means ytest
+print('Mean Squared Error: ' , mean_squared_error(ytest , ypred))
+print('R2Score ,cal  % Error:  ' , r2_score(ytest , ypred))
+---------------------------------------------------------------------
+#Linear Regression with FUELCONSUMPTION_CITY
+plt.scatter(feature.FUELCONSUMPTION_CITY,target.values)#Values will convert to numpy array
+plt.title('FUELCONSUMPTION_CITY Vs CO2EMISSIONS')
+plt.xlabel('FUELCONSUMPTION_CITY')
+plt.ylabel('CO2EMISSIONS')
+plt.show()
+----------------------------------------------------------------------
+model1FCC = LinearRegression()
+model1FCC.fit(xtrain[['FUELCONSUMPTION_CITY']] , ytrain.values.ravel())
+print(model1FCC.intercept_)#Theta 0
+print(model1FCC.coef_)#Theta 1
+ypred = model1FCC.predict(xtest[['FUELCONSUMPTION_CITY']])
+xtest[['FUELCONSUMPTION_CITY']] , ypred
+--------------------------------------------------------------------
+print('AVG Mean Absolute Error: ' , mean_absolute_error(ytest , ypred))#mean_absolute_error take 2 paramtr,1 is y_true means ytest
+print('Mean Squared Error: ' , mean_squared_error(ytest , ypred))
+print('R2Score ,cal  % Error:  ' , r2_score(ytest , ypred))
