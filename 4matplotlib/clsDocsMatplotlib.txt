@@ -1,0 +1,192 @@
+====================================================================
+                           #Matplotlib
+====================================================================
+Installation
+---------------------------------
+#! pip install matplotlib
+--------------------------------------------------------------------
+import numpy as np
+import matplotlib.pyplot as plt 
+%matplotlib inline 
+#magic command for visualize graph #will see how interact with anaconda,javascript %matplotlib notebook ,magic command not needed in py file
+-------------------------------------------------------------------------
+#Data
+x = np.arange(1,11)#generate 1to 10 values
+y = np.sin(x) ##sin of x values
+z = np.cos(x)
+x,y,z
+x.shape
+for v in zip(x,y,z):
+    print (v)
+---------------------------------------------------------------------
+                           #Line Plot
+--------------------------------------------------------------------
+plt.figure(figsize=(10,5)) # increase or decrease ghraph size
+plt.plot(x,y , color='black' , linewidth = '5' , label = 'Sin Line')#plot x and y values ,line color will be black,and line width 5
+plt.plot(x,z , color = "pink" , linewidth = '6' , label = 'Cos Line')
+plt.title('X Values VS Sin()')#set title of the graph
+plt.xlabel('X Values')#set s and y labels
+plt.ylabel('Sin Values')
+plt.grid(True)#it will generate rectangle in this graph
+plt.ylim(-2,2)#Set y limitations -2 to 2  ,increase or decrease uper and lower range
+plt.xlim(0,12) 
+plt.legend()#1st create label then call legend func for separate lines
+plt.show()
+-----------------------------------------------------------------------
+                      #bar plot vertically
+-----------------------------------------------------------------------
+plt.figure(figsize=(8,5))#graph size
+lang = ['Python' , 'r' , 'PHP' , 'C#']#value declare
+l = np.arange(1 , 5)#corresponding value of lang bcz string value cant understand 
+demands = [99 , 88 , 77 , 66]#generate y values 
+plt.bar(l , demands , color = 'black')#assign l and demand vaalues on graph
+plt.xticks(l,lang)#Edit x label as python,r,php,c#
+plt.title('programming Lang vs skills')
+plt.show()
+-------------------------------------------------------------------------
+                        #bar plot horizontally
+-----------------------------------------------------------------------
+plt.figure(figsize=(8,5))
+lang = ['Python' , 'r' , 'PHP' , 'C#']
+l = np.arange(1 , 5)
+demands = [99 , 88 , 77 , 66]
+plt.barh(l , demands , color = 'black')#for horizontally use barh
+plt.yticks(l,lang)#use y trick for show horizontall values,Edit y AXIS as python,r,php,c# 
+plt.title('programming Lang vs skills')
+plt.show()
+--------------------------------------------------------------------------
+                             #Histogram
+-----------------------------------------------------------------------
+plt.figure(figsize=(20,5))
+bloodPressur = np.random.randint(80 , 180,50)#randomly generate values
+bloodPressur[10:20] = 174 #for generate more values within 10 to 20 index as 174
+bloodPressur[30:45] = 120#30 to 45 index value assign 120
+plt.hist(bloodPressur , bins=[80 , 105 ,106 , 130 , 130 , 150, 160 , 180]) #default 5 bins ,now i set it 80 to 105,106 to 130....
+plt.show()
+bloodPressur
+------------------------------------------------------------------------
+                                #Scatter Plot
+------------------------------------------------------------------------
+#prb how to separate by line like ________________ this line in the middle
+plt.figure(figsize=(10,5))
+x = np.random.randint(80 , 180,50)
+y = np.random.randint(80 , 180,50)
+plt.scatter(x,y , color = 'black' , marker= '^', label ="Lower value" )
+plt.scatter(x,y*3 , color = 'purple' , marker= '*' , label = "Upper values")
+plt.legend()
+plt.savefig('any.jpg')#for save figure we can not use show()
+---------------------------------------------------------------------
+                                #pie chart
+---------------------------------------------------------------------
+Games = ['Racket' , 'Cricket' , 'Football' , 'Cheese' ]
+Participents = [200, 150 , 100 , 80]
+plt.pie(Participents , labels= Games , explode= (.05 , 0 , 0 , 0) , shadow= (.5,0,0,0) ,autopct='%1.3f%%')
+#for highlight use explods ,shadow not showing bcz of background color black
+#for show percentage use autopct ,1.3 means 3 decimal floating point
+
+plt.savefig('pyChart.png')
+------------------------------------------------------------------------
+                               #3D Plot,Scater Plot
+------------------------------------------------------------------------
+x = np.random.randint(80 , 180,50)
+y = np.random.randint(80 , 180,50)
+z = np.random.randint(80 , 180,50)
+fig = plt.figure(figsize= (10,6))#figure or Graph size
+axes = plt.axes(projection = '3d')#by default 2D ploting so we need to creat axes for 3D plot,and also by default 2d projection or none
+axes.scatter3D(x,y,z, marker= '^' , color='black')#for 3d use scatter3D
+
+plt.savefig('3DPlot.jpg')
+------------------------------------------------------------------------
+                                 #3D Line plot
+------------------------------------------------------------------------
+x = np.arange(1,11)#generate 1to 10 values
+y = np.sin(x) ##sin of x values
+z = np.cos(x)
+fig = plt.figure(figsize= (8,5))
+axes = plt.axes(projection = '3d')
+axes.plot(x,y,z)
+plt.show()
+------------------------------------------------------------------
+                               Zip Function
+------------------------------------------------------------------
+x.shape
+for v in zip(x,y,z):
+    print(v)
+================================================================
+                            3D Plot on py file
+=============================================================
+
+import numpy as np
+import matplotlib.pyplot as plt 
+
+
+
+x = np.random.randint(80 , 180,50)
+y = np.random.randint(80 , 180,50)
+z = np.random.randint(80 , 180,50)
+fig = plt.figure(figsize= (15,15))
+axes = plt.axes(projection = '3d')
+axes.scatter3D(x,y,z)
+plt.show()
+=====================================================================
+                       Live 3D Ploting on py file
+=====================================================================
+import numpy as np
+import matplotlib.pyplot as plt 
+
+
+x = np.random.randint(80 , 180,50)
+y = np.random.randint(80 , 180,50)
+z = np.random.randint(80 , 180,50)
+fig = plt.figure(figsize= (15,15))
+
+X = []#Creat empty list
+Y = []
+Z = []
+for index in range(x.shape[0]):
+    axes = plt.axes(projection = '3d')
+    X.append(x[index])#data will be append
+    Y.append(y[index])
+    Z.append(z[index])
+    axes.scatter3D(X ,Y , Z)
+    plt.pause(.5)#after .5 data will be update,pause after few tym
+plt.show()
+
+
+=====================================================================
+                     Open with jupyter notebook
+======================================================================
+1st open terminal > write: pip install jupyter
+
+then after download and install 
+------------------------------------
+write cls and press enter
+-------------------------------------------
+after open terminal write :python -m jupyter notebook //it will open window on browser
+----------------------------------------------
+then close vs code,and open file nineteen.ipynb on  browser>
+-----------------------------------------------------------
+then  instead of :   %matplotlib inline >>>>>
+write :  %matplotlib notebook .....then all code we can access.....
+======================================================================
+                              Open with cmd
+======================================================================
+First see Dirrectory>>>C:\Users\Nasa iT>dir
+then change dirrectory >>>C:\Users\Nasa iT>cd Downloads
+then again change >>>>>>>C:\Users\Nasa iT>cd ML
+-----------------------------------------------------
+then write: C:\Users\Nasa iT\Downloads\ML>jupyter-notebook
+it will open browser
+======================================================================
+                              Open with Another way :Jupyter Lab
+======================================================================
+Go to vs code>>then click terminal>>write: pip install jupyterlab
+--------------------------------------------------------
+after download and install write: cls>>>>>
+then write: jupyter-lab
+---------------------------------------
+it will also open browser>>>
+we need to use magic command >%matplotlib notebook
+=========================================
+for closing click terminal and type : ctrl c
+==============================================
