@@ -1,0 +1,8 @@
+1.PAndas Offi Docs
+https://pandas.pydata.org/docs/
+https://pandas.pydata.org/docs/index.html
+
+2.Worldometer_Covid_Data
+https://www.worldometers.info/coronavirus/
+3.ICC_Cricket_Ranking_Data
+https://www.icc-cricket.com/rankings/mens/team-rankings/t20i

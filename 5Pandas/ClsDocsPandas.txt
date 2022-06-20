@@ -1,0 +1,225 @@
+
+#Project- Web Scraping incomplete.
+#Seaborn – Data Visualization for ML & DS
+#Course Assignment
+
+#What was Inferential Statistics
+#Hypothesis Testing
+
+#Plz Cover Tablau
+
+#cover also :1.scicriatic library 
+#            2.seaborn python 
+#At the end  3.scikit-image library(Image recognition).(more better than pillow)
+#Image Processing in Python with Pillow 
+=====================================================================
+# Pandas :Storing Data in Tabular Fashion 
+
+2 main Concepts :1.Creating Series(for create 1D we use series) 
+                 2.Creating DataFrame(Collection of series called DtFr) (where data stored in acctual tabular fashion)
+=====================================================================
+			#! pip install pandas
+--------------------------------------------------------------------
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt 
+pd.__version__
+--------------------------------------------------------------------
+import os
+os.getcwd()#get current path or location
+#os.chdir('..')#back to previous folder or change dir by one.
+#os.chdir('f:\\Python\\python\\20thClass')
+---------------------------------------------------------------------
+#Creating Series
+series1 = pd.Series(list(range(1,20,2)),name = 'Age')#series of data,assigning index no for each data
+series1[1]#data access through indexing
+series1
+--------------------------------------------------------------------
+#prb
+#AM,HM,GM:arithmetic,hermonic,geometric mean??
+
+series1.mean()
+series1.median()#prb result should be 12 but why showing 10?
+--------------------------------------------------------------------
+#Type Casting or Changing
+series1.astype(np.float64).dtype
+---------------------------------------------------------------------
+#Creating DataFrame
+df = pd.DataFrame({
+    #'Age' : series1, # dirrectly assign series1
+    #'Height': series1*2
+    'Age' : list(range(1,20,2)),
+    'Height' : list(range(120,200,8)) 
+})
+df
+--------------------------------------------------------------------
+#df.columns#show column names
+#df.columns = ['Height' , 'Age']#Update or Edit Column Name
+#df.columns
+#df
+df.index#To see index,it will provide RangeIndex,one kind of object
+--------------------------------------------------------------------
+df.corr()
+df.mean()
+---------------------------------------------------------------------
+df[['Height']]#Access Height Column,it will be return DataFrame,when we use 2 3rd brackets
+df['Height']#If we use 1 third brackets then it will be series
+--------------------------------------------------------------------
+#prb
+
+#Loading DataFrame
+#Majorly We work with csv ,json file
+#We can go prv folder in Terminal through this command : cd .. 
+#df = pd.read_csv(r'Data\Iris.csv')#Now we can read our data
+#df = pd.read_html(r'Data\Iris.html')#HTML File read
+df = pd.read_json(r'Data\iris.json')#prb why its given value Error
+df
+
+--------------------------------------------------------------------
+#Now we want to change ID col to Index col 
+df.index
+df.set_index('Id' , inplace=True)#when we do set index,so that update the value on dataFrame, we need to use 1 parameter named inplace,by default it was False.
+df#now id will be our index
+---------------------------------------------------------------------
+#df = pd.read_clipboard(sep=',')#If copy(CTRL c) from csv file then it will show here. then use separator
+df
+--------------------------------------------------------------------
+#prb
+
+df.to_xml(r'Data\Iris.xml')#prb if i dlt also from  recycle bin ,but it will stored
+df.to_csv('Iris.csv')#didn't give any path,so it will stored there
+--------------------------------------------------------------------
+# SQL Data Stored
+#1st inport,then sql db connect,then iris(name) table with conn stored this db
+import sqlite3 as sq
+conn = sq.connect('Iris.db')#If this file not exist it will create this file,if file exist then np
+df.to_sql('IrisSQLLLLL' , conn)#1st parameter contains Table name,2nd parameter contains conn,
+conn.commit()#save changes
+conn.close()
+---------------------------------------------------------------------
+#prb
+
+#SQL data Read
+conn = sq.connect('Iris.db')
+df = pd.read_sql('SELECT * FROM IrisSQLLLL' , conn)# prb   Showing data from copy clipboard
+df
+--------------------------------------------------------------------
+conn.commit()#save changes
+conn.close()
+--------------------------------------------------------------------
+#Drop
+df.drop([0,1], inplace= True)#drop rows
+df
+---------------------------------------------------------------------
+df.drop(columns=['index','Id'] , inplace=True)#Drop col
+df
+--------------------------------------------------------------------
+#Info & Missing Data
+df.info()#it will show if there is any missing data or not ,abt whole data. 
+--------------------------------------------------------------------
+df.describe()#It will show statical info,25% data below 5.100
+---------------------------------------------------------------------
+#Head & Tail
+df.head(15)#Default top 5 data given,then i customize it to top 15
+df.tail(15)#Default bottom 5 data given,then i customize it to bottom 15
+--------------------------------------------------------------------
+#Columns and Renaming
+df.columns = ['SL','SW','PL','PW','SP']
+df
+---------------------------------------------------------------------
+#Filtering
+df.filter(items=['SW' , 'SP'])#WE can't use those items,regex,like combine,bcz both r mutually exclusive
+--------------------------------------------------------------------
+#Filtering with RE
+df.filter(regex='W$')#Col which end with W
+---------------------------------------------------------------------
+df.filter(like='S')#Match with Substring
+------------------------------------------------------------------
+#Where
+df['SW'].where(df['SW']<3)
+--------------------------------------------------------------------
+#GroupBy
+
+df.groupby(['SP']).median()
+df.groupby(['SP']).std()
+df.groupby(['SP']).mean()#find mean through SP 
+==================================================================
+
+#For accessing value stored output here
+                        SL	     SW	         PL      	PW
+SP				
+Iris-setosa	        5.00625	    3.425	1.466667	0.245833
+Iris-versicolor	    5.93600	    2.770	4.260000	1.326000
+Iris-virginica  	6.58800	    2.974	5.552000	2.026000
+==================================================================
+df.groupby('SP').mean().iloc[0,0]#output :5.0062500000000005
+df.groupby('SP').mean().iloc[2][3]# Output :2.026000
+df.groupby('SP').mean().iloc[0:1,0:4]#Output 1st Row
+-------------------------------------------------------------------
+#Apply with Lambda Function
+df['SW'].apply(np.sqrt)
+df[['SW']].apply(np.max)
+df[['SW']].apply(lambda x:x**3)
+------------------------------------------------------------------
+#Accessing Values
+df[['SW','SL']]
+--------------------------------------------------------------------
+#Filtering
+#not use where
+df
+df [ df [ 'SW' ] < 3 ]#Show all col which SW ls then 3
+df [ 'SW' ] [ df [ 'SW' ] < 3 ]#Show only SW col which value less then 3
+df [ ( df [ 'SW' ] < 3 ) & (df['SL'] < 5 ) ]
+df [ ( df [ 'SW' ] < 3 ) | (df['SL'] < 5 ) ]
+df [ ~(( df [ 'SW' ] < 3 ) & (df['SL'] < 5 ) )]#Using not symbol
+-------------------------------------------------------------------
+#Updating Values
+df.iloc[0,0] =6.6
+df['SW']=None#Assign SW col to none
+df
+-------------------------------------------------------------------
+#Dropna
+#df.dropna()#By default axis 0,so those  row which contain  none ,it will be droped 
+df.dropna(axis=1)#Which col contains none value ,it will dlt that col
+--------------------------------------------------------------------
+#Fillna
+#df.fillna(4)#col which Contain NONE value fill with 4,Same as assigning var
+df['SW']
+------------------------------------------------------------------
+df.iloc[1,0] = None#Assign none value to 1 no index
+df
+#df.dropna()#Dlt row which contains none value
+var = df.dropna()[['SL']].mean()#1st calculate mean of SL col
+df.fillna(var, inplace=True)#then store  mean value  to none value  
+df
+--------------------------------------------------------------------
+#pivot Table,Similarly group
+df.pivot_table(values='SL',index=['SP'])#1st call pivot tbl,then use which col(SL) as a value,and use which col(SP) as a index.
+#By Default it return mean
+df.pivot_table(values='SL',index=['SP'] ,aggfunc=np.median)#Aggregate to median
+-------------------------------------------------------------------
+#Line Plot
+plt.figure(figsize=(15,10))#Not Working
+df.plot()
+plt.savefig('Flower.png')
+-------------------------------------------------------------------
+#Bar Plot
+df.plot(kind='bar')
+--------------------------------------------------------------------
+df.boxplot()#outlier (o-_sw)
+------------------------------------------------------------------
+df.plot(kind='hist')
+--------------------------------------------------------------------
+# Data----COVID-Worldometer_ Live Update: 263,436,951 Cases and 5,238,301 Deaths from the Coronavirus - Worldometer
+#pd.read_html(r'https://www.worldometers.info/coronavirus/')
+#ICC Cricket Data
+df = pd.read_html(r'https://www.icc-cricket.com/rankings/mens/team-rankings/t20i')
+
+df[0]
+-------------------------------------------------------------------
+
+-------------------------------------------------------------------
+
+--------------------------------------------------------------------
+
+------------------------------------------------------------------
