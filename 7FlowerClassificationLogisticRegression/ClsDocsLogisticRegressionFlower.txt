@@ -1,0 +1,116 @@
+======================================================================
+import numpy as np
+import matplotlib.pyplot as plt
+import pandas as pd
+import seaborn as sns
+%matplotlib inline
+======================================================================
+#Loading data
+data = pd.read_csv(r'Iris.csv')
+data.head()
+----------------------------------------------------------------------
+data.drop(columns= ['Id'] , inplace=True)
+data.head()
+----------------------------------------------------------------------
+data.columns = ['SL' , 'SW' , 'PL' , 'PW' , 'SP']#Col Renaming
+----------------------------------------------------------------------
+data.info()#Check for missing val
+----------------------------------------------------------------------
+#To see total unique values of Species
+data[['SP']].value_counts()
+----------------------------------------------------------------------
+#Extracting data
+#data.columns#To see cols name
+#data.columns[[0]]#DataType Object
+#data.columns[:4]
+X = data[data.columns[:4]]
+X
+----------------------------------------------------------------------
+#Y = data[data.columns[-1]]#Return String value
+Y = data[[data.columns[-1]]]#Now its return as DataFrame
+Y
+----------------------------------------------------------------------
+#data renaming
+#Data Preprocessing
+#data[['Species']].replace({'Iris-setosa':0} , {'Iris-versicolor': 1} , {'Iris-virginica' : 2})#but not will be update on main dataset
+data
+#data[['Species']] = data[['Species']].replace({'Iris-setosa':0 , 'Iris-versicolor': 1 , 'Iris-virginica' : 2})#thats why we assign it to same var
+
+#data[['Species']].value_counts()
+----------------------------------------------------------------------
+#Another Way of data renaming
+#Label Encoder
+from sklearn.preprocessing import LabelEncoder
+encoder = LabelEncoder()#Create encoder object
+#encodedY = encoder.fit_transform(Y)#to overcome this error will use ravel
+encodedY = encoder.fit_transform(Y.values.ravel())#Values for convert numpy, and ravel for 1D
+encodedY
+----------------------------------------------------------------------
+fig1 = plt.figure(1,figsize=(20,8))
+plt.scatter(X[['SL']] , encodedY , color = 'black' , marker='*')
+plt.xlabel('Sepal Length')
+plt.ylabel('Species')
+plt.show()
+----------------------------------------------------------------------
+#Filtering
+data[data['SP'] == 'Iris-setosa'][['SL']]
+#data[data['SP'] == 'Iris-setosa'][['SL' , 'SP']]
+----------------------------------------------------------------------
+# Now will create Subplots
+# 1 row,2 cols.it will return 1 figure and 1 axes
+fig, axes = plt.subplots(1, 2, figsize=(20, 8))
+axes[0].scatter(data[data['SP'] == 'Iris-setosa'][['SL']],
+                data[data['SP'] == 'Iris-setosa'][['SW']], label = 'Iris-setosa' , color='brown', marker='*')
+axes[0].scatter(data[data['SP'] == 'Iris-versicolor'][['SL']],
+                data[data['SP'] == 'Iris-versicolor'][['SW']], label = 'Iris-versicolor' , color='black', marker='^')
+axes[0].scatter(data[data['SP'] == 'Iris-virginica'][['SL']],
+                data[data['SP'] == 'Iris-virginica'][['SW']], label = 'Iris-virginica' , color='green', marker='+')
+
+axes[0].set_xlabel('Sepal Length')
+axes[0].set_ylabel('Sepal width')
+
+
+axes[1].scatter(data[data['SP'] == 'Iris-setosa'][['PL']],
+                data[data['SP'] == 'Iris-setosa'][['PW']], label = 'Iris-setosa' , color='brown', marker='*')
+axes[1].scatter(data[data['SP'] == 'Iris-versicolor'][['PL']],
+                data[data['SP'] == 'Iris-versicolor'][['PW']], label = 'Iris-versicolor' , color='black', marker='^')
+axes[1].scatter(data[data['SP'] == 'Iris-virginica'][['PL']],
+                data[data['SP'] == 'Iris-virginica'][['PW']], label = 'Iris-virginica' , color='green', marker='+')
+
+axes[1].set_xlabel('Petal Length')
+axes[1].set_ylabel('Petal width')
+
+plt.legend()
+plt.show()
+
+----------------------------------------------------------------------
+#Spliting Data
+from sklearn.model_selection import train_test_split
+xtrain , xtest , ytrain , ytest = train_test_split(X[['PL' ,'PW']] , encodedY , test_size= .2 , random_state= 42 )
+
+----------------------------------------------------------------------
+#Modeling
+from sklearn.linear_model import LogisticRegression
+model = LogisticRegression()
+model.fit(xtrain , ytrain)
+ypred = model.predict(xtest)
+----------------------------------------------------------------------
+#ypred,ytest
+ypred == ytest
+----------------------------------------------------------------------
+from sklearn.metrics import confusion_matrix , accuracy_score
+confusion_matrix(ytest , ypred)
+----------------------------------------------------------------------
+from sklearn.metrics import plot_confusion_matrix
+plot_confusion_matrix(model , xtest , ytest)#For better view of confusion metrix
+--------------------------------------------------------------------
+accuracy_score(ytest,ypred)
+-------------------------------------------------------------------
+print(ytest,ypred)
+#Now we will convert numeric to textual
+encoder.inverse_transform(ypred)
+=====================================================================
+				End of Cls 25
+===================================================================
+			       Start with cls 26
+===================================================================
